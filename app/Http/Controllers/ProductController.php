@@ -4,14 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use DataTables;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $data = Product::latest()->get();
+        if ($request->ajax()) {
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn =
+                        '<button class="edit btn btn-primary" data-name="' .$row->name .'" data-id="'.$row->id.'"><i class="fas fa-edit"></i></button> <button class="delete btn btn-danger" data-id="' .
+                        $row->id .
+                        '"><i class="fas fa-trash"></i></button>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         return view('products.index');
     }
 
@@ -20,7 +36,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.add');
     }
 
     /**
@@ -30,7 +46,7 @@ class ProductController extends Controller
     {
         $request['profit'] = $request->selling_price - $request->purchase_price;
         $product = Product::create($request->all());
-        return redirect('products');
+        return redirect('products')->with('status','Berhasil menambah produk');
     }
 
     /**
@@ -62,6 +78,8 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::find($id)->delete();
+
+        return redirect('products')->with('status','Berhasil menghapus produk');
     }
 }
