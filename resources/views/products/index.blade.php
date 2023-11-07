@@ -18,6 +18,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Produk</th>
+                                    <th>Stok</th>
                                     <th>Harga Jual</th>
                                     <th>Harga Beli</th>
                                     <th>Aksi</th>
@@ -82,6 +83,10 @@
                         name: 'name'
                     },
                     {
+                        data: 'stock',
+                        name: 'stock'
+                    },
+                    {
                         data: 'purchase_price',
                         name: 'purchase_price'
                     },
@@ -107,15 +112,15 @@
         });
     </script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @if(session('status'))
-    <script>
-      Swal.fire({
-        icon: 'success',
-        title: '{{ session('status') }}',
-        showConfirmButton: false,
-        timer: 1500
-      })
-    </script>
+    @if (session('status'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '{{ session('status') }}',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
     @endif
-    
+
 @stop

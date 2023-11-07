@@ -19,7 +19,7 @@ class ProductController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $actionBtn =
-                        '<button class="edit btn btn-primary" data-name="' .$row->name .'" data-id="'.$row->id.'"><i class="fas fa-edit"></i></button> <button class="delete btn btn-danger" data-id="' .
+                        '<a href="/products/'.$row->id.'/edit" class="btn btn-primary"><i class="fas fa-edit"></i></a> <button class="delete btn btn-danger" data-id="' .
                         $row->id .
                         '"><i class="fas fa-trash"></i></button>';
                     return $actionBtn;
@@ -62,7 +62,9 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::find($id);
+
+        return view('products.edit', compact('product'));
     }
 
     /**
@@ -70,7 +72,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->stock = $request->stock;
+        $product->purchase_price = $request->purchase_price;
+        $product->selling_price = $request->selling_price;
+        $product->save();
+
+        return redirect('products')->with('status','Berhasil mengupdate produk');
     }
 
     /**
