@@ -77,6 +77,7 @@ class ProductController extends Controller
         $product->stock = $request->stock;
         $product->purchase_price = $request->purchase_price;
         $product->selling_price = $request->selling_price;
+        $product->unit = $request->unit;
         $product->save();
 
         return redirect('products')->with('status','Berhasil mengupdate produk');

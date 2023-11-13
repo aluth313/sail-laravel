@@ -19,6 +19,7 @@
                                     <th>No</th>
                                     <th>Produk</th>
                                     <th>Stok</th>
+                                    <th>Satuan</th>
                                     <th>Harga Jual</th>
                                     <th>Harga Beli</th>
                                     <th>Aksi</th>
@@ -85,6 +86,10 @@
                     {
                         data: 'stock',
                         name: 'stock'
+                    },
+                    {
+                        data: 'unit',
+                        name: 'unit'
                     },
                     {
                         data: 'purchase_price',

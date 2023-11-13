@@ -30,6 +30,10 @@
                                 <input type="number" class="form-control" id="stock" name="stock" placeholder="Masukkan stok" required>
                             </div>
                             <div class="form-group">
+                                <label for="unit">Satuan</label>
+                                <input type="text" class="form-control" id="unit" name="unit" placeholder="Masukkan Satuan">
+                            </div>
+                            <div class="form-group">
                                 <label for="purchase_price">Harga Beli</label>
                                 <input type="number" class="form-control" id="purchase_price" name="purchase_price"
                                     placeholder="Masukkan Harga Beli atau Modal" required>
