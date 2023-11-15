@@ -18,16 +18,49 @@
                                 class="fas fa-search"></i></button>
                     </div>
                 </div>
-                <ul class="list-group mt-3" id="searchResults"></ul>
+                <div class="col-md-12" style="position: absolute; z-index: 1;">
+                    <ul class="list-group mt-2" id="searchResults"></ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
+    <div class="container-fluid mt-2" style="height: 70vh;">
+        <div class="row h-100">
+            <div class="col-md-6">
+                <div class="card card-primary h-100">
+                    <div class="card-body" id="scrollable-content">
+                          <div class="card p-3">
+                              <table class="w-100">
+                                  <tr>
+                                      <td>
+                                          <p style="font-size: 14pt; font-weight: 600;">Sukro</p>
+                                      </td>
+                                      <td rowspan="3" class="delete-item"><button type="button" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <p>Rp. 5000</p>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td>
+                                          <div class="row text-center">
+                                                  <button type="button" class="btn btn-secondary mr-3"><i class="fas fa-minus"></i></button>
+                                                  <span class="mt-1">1</span>
+                                                  <button type="button" class="btn btn-secondary ml-3"><i class="fas fa-plus"></i></button>
+                                          </div>
+                                      </td>
+                                  </tr>
+                              </table>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="card card-primary">
                     <div class="card-body">
-                        <h1>Hai</h1>
+                        <h5>Total Belanja <span class="result-nominal">Rp. 5000</span></h5>
+                        <button class="form-control btn btn-success btn-lg mt-3" style="height: 50px">BAYAR</button>
                     </div>
                 </div>
             </div>
@@ -49,6 +82,26 @@
             /* Sesuaikan dengan tinggi yang diinginkan */
             overflow-y: auto;
         }
+
+        #scrollable-content {
+            max-height: 70vh;
+            /* Sesuaikan dengan tinggi yang diinginkan */
+            overflow-y: auto;
+        }
+
+        .result-nominal {
+            float: right;
+            /* Untuk memposisikan elemen ke sebelah kanan */
+            color: #007bff;
+            /* Warna teks */
+            font-weight: bold;
+            /* Ketebalan teks */
+            /* Tambahkan gaya lain sesuai kebutuhan */
+        }
+
+        .delete-item{
+            text-align-last: right;
+        }
     </style>
 @stop
 
@@ -62,7 +115,7 @@
                 // Hanya tampilkan hasil pencarian jika ada nilai input
                 if (inputValue.length > 0) {
                     // Simulasikan hasil pencarian (gantilah dengan logika pencarian sesungguhnya)
-                    var searchResults = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"];
+                    var searchResults = ["Sayur Lodeh", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"];
 
                     // Tampilkan hasil pencarian dalam daftar
                     displaySearchResults(searchResults);
@@ -91,6 +144,7 @@
                 // Tambahkan setiap hasil pencarian ke dalam daftar
                 results.forEach(function(result) {
                     $("#searchResults").append('<li class="list-group-item search-result-item">' + result +
+                        '<span class="result-nominal"> 5000</span>' +
                         '</li>');
                 });
             }
