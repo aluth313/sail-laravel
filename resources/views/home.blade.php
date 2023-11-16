@@ -59,6 +59,18 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-7">
+                                <h5>Pelanggan</h5>
+                            </div>
+                            <div class="col-5">
+                                <select name="customer_id" id="customer_id" class="form-control">
+                                    <option value="">== Pilih Pelanggan ==</option>
+                                    <option value="1">Aceng</option>
+                                    <option value="2">Ucok</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-7">
                                 <h5>Ongkos Kirim</h5>
                             </div>
                             <div class="col-5">
