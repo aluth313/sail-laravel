@@ -29,37 +29,52 @@
             <div class="col-md-6">
                 <div class="card card-primary h-100">
                     <div class="card-body" id="scrollable-content">
-                          <div class="card p-3">
-                              <table class="w-100">
-                                  <tr>
-                                      <td>
-                                          <p style="font-size: 14pt; font-weight: 600;">Sukro</p>
-                                      </td>
-                                      <td rowspan="3" class="delete-item"><button type="button" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
-                                  </tr>
-                                  <tr>
-                                      <td>
-                                          <p>Rp. 5000</p>
-                                      </td>
-                                  </tr>
-                                  <tr>
-                                      <td>
-                                          <div class="row text-center">
-                                                  <button type="button" class="btn btn-secondary mr-3"><i class="fas fa-minus"></i></button>
-                                                  <span class="mt-1">1</span>
-                                                  <button type="button" class="btn btn-secondary ml-3"><i class="fas fa-plus"></i></button>
-                                          </div>
-                                      </td>
-                                  </tr>
-                              </table>
-                          </div>
+                        <div class="card p-3">
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="row">
+                                        <h5 style="font-size: 14pt; font-weight: 600;">Sukro</h5>
+                                    </div>
+                                    <div class="row">
+                                        <h6>Rp. 5000</h6>
+                                    </div>
+                                    <div class="row text-center">
+                                        <button type="button" class="btn btn-secondary mr-3"><i
+                                                class="fas fa-minus"></i></button>
+                                        <span class="mt-1">1</span>
+                                        <button type="button" class="btn btn-secondary ml-3"><i
+                                                class="fas fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-5 align-self-center text-right">
+                                    <button type="button" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card card-primary">
                     <div class="card-body">
-                        <h5>Total Belanja <span class="result-nominal">Rp. 5000</span></h5>
+                        <div class="row">
+                            <div class="col-7">
+                                <h5>Ongkos Kirim</h5>
+                            </div>
+                            <div class="col-5">
+                                <input type="text" name="shipping_price" id="shipping_price" class="form-control"
+                                    placeholder="Ongkir jika ada...">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-7">
+                                <h5>Total Belanja</h5>
+                            </div>
+                            <div class="col-5">
+                                <h5 class="text-right text-primary font-weight-bold">Rp. 5000</h5>
+                            </div>
+                        </div>
+
                         <button class="form-control btn btn-success btn-lg mt-3" style="height: 50px">BAYAR</button>
                     </div>
                 </div>
@@ -99,7 +114,7 @@
             /* Tambahkan gaya lain sesuai kebutuhan */
         }
 
-        .delete-item{
+        .delete-item {
             text-align-last: right;
         }
     </style>
