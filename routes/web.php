@@ -25,3 +25,5 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('products', App\Http\Controllers\ProductController::class);
+Route::resource('account', App\Http\Controllers\UserController::class);
+Route::put('/account/change-password/{id}', [App\Http\Controllers\UserController::class, 'updatePassword']);
