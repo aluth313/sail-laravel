@@ -136,20 +136,39 @@
     <script>
         $(document).ready(function() {
             $("#searchInput").on("input", function() {
-                // Dapatkan nilai input
-                var inputValue = $(this).val().toLowerCase();
+                isLanjutanDieksekusi = false;
+                setTimeout(() => {
+                    if (!isLanjutanDieksekusi) {
+                        console.log($(this).val());
+                        var inputValue = $(this).val().toLowerCase();
+                        if (inputValue.length > 0) {
+                            var data = {
+                                query: inputValue,
+                                _token: '{{ csrf_token() }}',
+                            };
 
-                // Hanya tampilkan hasil pencarian jika ada nilai input
-                if (inputValue.length > 0) {
-                    // Simulasikan hasil pencarian (gantilah dengan logika pencarian sesungguhnya)
-                    var searchResults = ["Sayur Lodeh", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6"];
-
-                    // Tampilkan hasil pencarian dalam daftar
-                    displaySearchResults(searchResults);
-                } else {
-                    // Kosongkan hasil pencarian jika tidak ada nilai input
-                    $("#searchResults").empty();
-                }
+                            $.ajax({
+                                type: 'POST',
+                                url: '/products/search',
+                                data: data,
+                                success: function(response) {
+                                    if (response.length > 0) {
+                                        displaySearchResults(response);
+                                    } else {
+                                        $("#searchResults").append('<li class="list-group-item">produk tidak ditemukan</li>');
+                                    }
+                                },
+                                error: function(error) {
+                                    console.error('Terjadi kesalahan:', error);
+                                }
+                            });
+                        } else {
+                            // Kosongkan hasil pencarian jika tidak ada nilai input
+                            $("#searchResults").empty();
+                        }
+                        isLanjutanDieksekusi = true;
+                    }
+                }, 1000);
             });
 
             // Fungsi untuk menangani klik pada hasil pencarian
@@ -170,8 +189,8 @@
 
                 // Tambahkan setiap hasil pencarian ke dalam daftar
                 results.forEach(function(result) {
-                    $("#searchResults").append('<li class="list-group-item search-result-item">' + result +
-                        '<span class="result-nominal"> 5000</span>' +
+                    $("#searchResults").append('<li class="list-group-item search-result-item">' + result.name +
+                        '<span class="result-nominal"> '+ result.selling_price +'</span>' +
                         '</li>');
                 });
             }

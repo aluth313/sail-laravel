@@ -48,6 +48,13 @@ class ProductController extends Controller
         $product = Product::create($request->all());
         return redirect('products')->with('status','Berhasil menambah produk');
     }
+    
+    public function search(Request $request)
+    {
+        $products = Product::where('name', 'like', '%'.$request->input('query').'%')
+        ->get();
+        return $products;
+    }
 
     /**
      * Display the specified resource.
