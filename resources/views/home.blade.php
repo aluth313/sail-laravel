@@ -29,28 +29,6 @@
             <div class="col-md-6">
                 <div class="card card-primary h-100">
                     <div class="card-body" id="scrollable-content">
-                        <div class="card p-3">
-                            <div class="row">
-                                <div class="col-7">
-                                    <div class="row">
-                                        <h5 style="font-size: 14pt; font-weight: 600;">Sukro</h5>
-                                    </div>
-                                    <div class="row">
-                                        <h6>Rp. 5000</h6>
-                                    </div>
-                                    <div class="row text-center">
-                                        <button type="button" class="btn btn-secondary mr-3"><i
-                                                class="fas fa-minus"></i></button>
-                                        <span class="mt-1">1</span>
-                                        <button type="button" class="btn btn-secondary ml-3"><i
-                                                class="fas fa-plus"></i></button>
-                                    </div>
-                                </div>
-                                <div class="col-5 align-self-center text-right">
-                                    <button type="button" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -74,7 +52,7 @@
                                 <h5>Ongkos Kirim</h5>
                             </div>
                             <div class="col-5">
-                                <input type="text" name="shipping_price" id="shipping_price" class="form-control"
+                                <input type="number" name="shipping_price" id="shipping_price" class="form-control"
                                     placeholder="Ongkir jika ada...">
                             </div>
                         </div>
@@ -126,20 +104,20 @@
             /* Tambahkan gaya lain sesuai kebutuhan */
         }
 
-        .delete-item {
+        /* .delete-item {
             text-align-last: right;
-        }
+        } */
     </style>
 @stop
 
 @section('js')
     <script>
         $(document).ready(function() {
+            var selectedItem = [];
             $("#searchInput").on("input", function() {
                 isLanjutanDieksekusi = false;
                 setTimeout(() => {
                     if (!isLanjutanDieksekusi) {
-                        console.log($(this).val());
                         var inputValue = $(this).val().toLowerCase();
                         if (inputValue.length > 0) {
                             var data = {
@@ -155,7 +133,9 @@
                                     if (response.length > 0) {
                                         displaySearchResults(response);
                                     } else {
-                                        $("#searchResults").append('<li class="list-group-item">produk tidak ditemukan</li>');
+                                        $("#searchResults").append(
+                                            '<li class="list-group-item">produk tidak ditemukan</li>'
+                                            );
                                     }
                                 },
                                 error: function(error) {
@@ -173,13 +153,76 @@
 
             // Fungsi untuk menangani klik pada hasil pencarian
             $(document).on("click", ".search-result-item", function() {
-                // Tangkap teks dari item yang diklik
-                var selectedItemText = $(this).text();
+                var result = $(this).data('result');
+                selectedItem.push(result);
+                console.log(selectedItem);
+                var item = $('<div class="card p-3">\
+                                <div class="row">\
+                                    <div class="col-7">\
+                                        <div class="row">\
+                                            <h5 style="font-size: 14pt; font-weight: 600;">' + result.name + '</h5>\
+                                        </div>\
+                                        <div class="row">\
+                                            <h6>Rp. ' + result.selling_price + '</h6>\
+                                        </div>\
+                                        <div class="row text-center">\
+                                            <button type="button" class="btn btn-secondary mr-3" data-id="'+ result.id +'"><i\
+                                                    class="fas fa-minus"></i></button>\
+                                            <span class="mt-1">1</span>\
+                                            <button type="button" class="btn btn-secondary ml-3" data-id="'+ result.id +'"><i\
+                                                    class="fas fa-plus"></i></button>\
+                                        </div>\
+                                    </div>\
+                                    <div class="col-5 align-self-center text-right">\
+                                        <button type="button" class="btn btn-danger delete-item" data-id="'+ result.id +'"><i class="fas fa-trash"></i></button>\
+                                    </div>\
+                                </div>\
+                            </div>');
 
-                // Tampilkan teks item yang diklik di console (gantilah dengan aksi yang sesuai)
-                console.log("Anda memilih: " + selectedItemText);
+                $('#scrollable-content').append(item);
+
                 $("#searchResults").empty();
                 $("#searchInput").val('');
+                $("#searchInput").focus();
+            });
+            
+            $(document).on("click", ".delete-item", function() {
+                var result = $(this).data('id');
+                console.log(result);
+                console.log('sebelum');
+                console.log(selectedItem);
+                selectedItem = selectedItem.filter(item => item.id != result);
+                console.log('sesudah');
+                console.log(selectedItem);
+                $('#scrollable-content').empty();
+
+                for (let index = 0; index < selectedItem.length; index++) {
+                    var item = $('<div class="card p-3">\
+                                    <div class="row">\
+                                        <div class="col-7">\
+                                            <div class="row">\
+                                                <h5 style="font-size: 14pt; font-weight: 600;">' + selectedItem[index].name + '</h5>\
+                                            </div>\
+                                            <div class="row">\
+                                                <h6>Rp. ' + selectedItem[index].selling_price + '</h6>\
+                                            </div>\
+                                            <div class="row text-center">\
+                                                <button type="button" class="btn btn-secondary mr-3" data-id="'+ selectedItem[index].id +'"><i\
+                                                        class="fas fa-minus"></i></button>\
+                                                <span class="mt-1">1</span>\
+                                                <button type="button" class="btn btn-secondary ml-3" data-id="'+ selectedItem[index].id +'"><i\
+                                                        class="fas fa-plus"></i></button>\
+                                            </div>\
+                                        </div>\
+                                        <div class="col-5 align-self-center text-right">\
+                                            <button type="button" class="btn btn-danger delete-item" data-id="'+ selectedItem[index].id +'"><i class="fas fa-trash"></i></button>\
+                                        </div>\
+                                    </div>\
+                                </div>');
+    
+                    $('#scrollable-content').append(item);
+                }
+                $("#searchInput").focus();
             });
 
             // Fungsi untuk menampilkan hasil pencarian dalam daftar
@@ -189,9 +232,16 @@
 
                 // Tambahkan setiap hasil pencarian ke dalam daftar
                 results.forEach(function(result) {
-                    $("#searchResults").append('<li class="list-group-item search-result-item">' + result.name +
-                        '<span class="result-nominal"> '+ result.selling_price +'</span>' +
+                    var liElement = $('<li class="list-group-item search-result-item" data-result>' + result
+                        .name +
+                        '<span class="result-nominal"> ' + result.selling_price + '</span>' +
                         '</li>');
+
+                    // $("#searchResults").append('<li class="list-group-item search-result-item">' + result.name +
+                    //     '<span class="result-nominal"> '+ result.selling_price +'</span>' +
+                    //     '</li>');
+                    liElement.attr('data-result', JSON.stringify(result));
+                    $("#searchResults").append(liElement);
                 });
             }
         });
