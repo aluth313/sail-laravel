@@ -25,51 +25,56 @@
         </div>
     </div>
     <div class="container-fluid mt-2" style="height: 70vh;">
-        <div class="row h-100">
-            <div class="col-md-6">
-                <div class="card card-primary h-100">
-                    <div class="card-body" id="scrollable-content">
+        <form action="/sales" method="POST">
+            @csrf
+            <div class="row h-100">
+                <div class="col-md-6">
+                    <div class="card card-primary h-100">
+                        <input type="hidden" name="selected_items" id="selected_items">
+                        <input type="hidden" name="grand_total" id="grand_total">
+                        <div class="card-body" id="scrollable-content">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-primary">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-7">
+                                    <h5>Pelanggan</h5>
+                                </div>
+                                <div class="col-5">
+                                    <select name="customer_id" id="customer_id" class="form-control">
+                                        <option value="">== Pilih Pelanggan ==</option>
+                                        <option value="1">Aceng</option>
+                                        <option value="2">Ucok</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-7">
+                                    <h5>Ongkos Kirim</h5>
+                                </div>
+                                <div class="col-5">
+                                    <input type="number" name="shipping_price" id="shipping_price" class="form-control"
+                                        placeholder="Ongkir jika ada...">
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-7">
+                                    <h5>Total Belanja</h5>
+                                </div>
+                                <div class="col-5">
+                                    <h5 class="text-right text-primary font-weight-bold" id="total-spend">Rp. 0</h5>
+                                </div>
+                            </div>
+    
+                            <button type="submit" class="form-control btn btn-success btn-lg mt-3" style="height: 50px">BAYAR</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card card-primary">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-7">
-                                <h5>Pelanggan</h5>
-                            </div>
-                            <div class="col-5">
-                                <select name="customer_id" id="customer_id" class="form-control">
-                                    <option value="">== Pilih Pelanggan ==</option>
-                                    <option value="1">Aceng</option>
-                                    <option value="2">Ucok</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-7">
-                                <h5>Ongkos Kirim</h5>
-                            </div>
-                            <div class="col-5">
-                                <input type="number" name="shipping_price" id="shipping_price" class="form-control"
-                                    placeholder="Ongkir jika ada...">
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-7">
-                                <h5>Total Belanja</h5>
-                            </div>
-                            <div class="col-5">
-                                <h5 class="text-right text-primary font-weight-bold" id="total-spend">Rp. 0</h5>
-                            </div>
-                        </div>
-
-                        <button class="form-control btn btn-success btn-lg mt-3" style="height: 50px">BAYAR</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 @stop
 
@@ -209,6 +214,8 @@
                 }
                 totalSpend += parseFloat($('#shipping_price').val() == '' ? '0' : $('#shipping_price').val());
                 $('#total-spend').text('Rp. '+totalSpend+'');
+                $('#selected_items').val(JSON.stringify(selectedItem));
+                $('#grand_total').val(totalSpend);
             }
 
             $(document).on("click", ".delete-item", function() {
@@ -296,4 +303,15 @@
             }
         });
     </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('status'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '{{ session('status') }}',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        </script>
+    @endif
 @stop
