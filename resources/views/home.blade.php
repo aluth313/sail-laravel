@@ -61,7 +61,7 @@
                                 <h5>Total Belanja</h5>
                             </div>
                             <div class="col-5">
-                                <h5 class="text-right text-primary font-weight-bold">Rp. 5000</h5>
+                                <h5 class="text-right text-primary font-weight-bold" id="total-spend">Rp. 0</h5>
                             </div>
                         </div>
 
@@ -105,15 +105,17 @@
         }
 
         /* .delete-item {
-            text-align-last: right;
-        } */
+                text-align-last: right;
+            } */
     </style>
 @stop
 
 @section('js')
     <script>
         $(document).ready(function() {
+            $("#searchInput").focus();
             var selectedItem = [];
+            var totalSpend = 0;
             $("#searchInput").on("input", function() {
                 isLanjutanDieksekusi = false;
                 setTimeout(() => {
@@ -135,7 +137,7 @@
                                     } else {
                                         $("#searchResults").append(
                                             '<li class="list-group-item">produk tidak ditemukan</li>'
-                                            );
+                                        );
                                     }
                                 },
                                 error: function(error) {
@@ -150,80 +152,128 @@
                     }
                 }, 1000);
             });
+            
+            $("#shipping_price").on("input", function() {
+                calculateTotalSpend();
+            });
 
             // Fungsi untuk menangani klik pada hasil pencarian
             $(document).on("click", ".search-result-item", function() {
                 var result = $(this).data('result');
-                selectedItem.push(result);
-                console.log(selectedItem);
-                var item = $('<div class="card p-3">\
-                                <div class="row">\
-                                    <div class="col-7">\
+                var isExist = selectedItem.findIndex(item => item.id == result.id);
+                if (isExist == -1) {
+                    result.qty = 1;
+                    selectedItem.push(result);
+                    var item = $('<div class="card p-3">\
                                         <div class="row">\
-                                            <h5 style="font-size: 14pt; font-weight: 600;">' + result.name + '</h5>\
+                                            <div class="col-7">\
+                                                <div class="row">\
+                                                    <h5 style="font-size: 14pt; font-weight: 600;">' + result.name + '</h5>\
+                                                </div>\
+                                                <div class="row">\
+                                                    <h6>Rp. ' + result.selling_price +
+                        '</h6>\
+                                                </div>\
+                                                <div class="row text-center">\
+                                                    <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' + result.id + '"><i\
+                                                            class="fas fa-minus"></i></button>\
+                                                    <span class="mt-1">' + result.qty +
+                        '</span>\
+                                                    <button type="button" class="btn btn-secondary ml-3 increment" data-id="' + result.id + '"><i\
+                                                            class="fas fa-plus"></i></button>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-5 align-self-center text-right">\
+                                                <button type="button" class="btn btn-danger delete-item" data-id="' +
+                        result.id + '"><i class="fas fa-trash"></i></button>\
+                                            </div>\
                                         </div>\
-                                        <div class="row">\
-                                            <h6>Rp. ' + result.selling_price + '</h6>\
-                                        </div>\
-                                        <div class="row text-center">\
-                                            <button type="button" class="btn btn-secondary mr-3" data-id="'+ result.id +'"><i\
-                                                    class="fas fa-minus"></i></button>\
-                                            <span class="mt-1">1</span>\
-                                            <button type="button" class="btn btn-secondary ml-3" data-id="'+ result.id +'"><i\
-                                                    class="fas fa-plus"></i></button>\
-                                        </div>\
-                                    </div>\
-                                    <div class="col-5 align-self-center text-right">\
-                                        <button type="button" class="btn btn-danger delete-item" data-id="'+ result.id +'"><i class="fas fa-trash"></i></button>\
-                                    </div>\
-                                </div>\
-                            </div>');
+                                    </div>');
 
-                $('#scrollable-content').append(item);
+                    $('#scrollable-content').append(item);
+                } else {
+                    selectedItem[isExist].qty += 1;
+                    appendToSelectedItems(selectedItem);
+                }
 
                 $("#searchResults").empty();
                 $("#searchInput").val('');
                 $("#searchInput").focus();
+                calculateTotalSpend();
             });
-            
+
+            function calculateTotalSpend() {
+                totalSpend = 0;
+                for (let index = 0; index < selectedItem.length; index++) {
+                    totalSpend += (selectedItem[index].qty * selectedItem[index].selling_price);
+                }
+                totalSpend += parseFloat($('#shipping_price').val() == '' ? '0' : $('#shipping_price').val());
+                $('#total-spend').text('Rp. '+totalSpend+'');
+            }
+
             $(document).on("click", ".delete-item", function() {
                 var result = $(this).data('id');
-                console.log(result);
-                console.log('sebelum');
-                console.log(selectedItem);
                 selectedItem = selectedItem.filter(item => item.id != result);
-                console.log('sesudah');
-                console.log(selectedItem);
-                $('#scrollable-content').empty();
 
-                for (let index = 0; index < selectedItem.length; index++) {
-                    var item = $('<div class="card p-3">\
-                                    <div class="row">\
-                                        <div class="col-7">\
-                                            <div class="row">\
-                                                <h5 style="font-size: 14pt; font-weight: 600;">' + selectedItem[index].name + '</h5>\
-                                            </div>\
-                                            <div class="row">\
-                                                <h6>Rp. ' + selectedItem[index].selling_price + '</h6>\
-                                            </div>\
-                                            <div class="row text-center">\
-                                                <button type="button" class="btn btn-secondary mr-3" data-id="'+ selectedItem[index].id +'"><i\
-                                                        class="fas fa-minus"></i></button>\
-                                                <span class="mt-1">1</span>\
-                                                <button type="button" class="btn btn-secondary ml-3" data-id="'+ selectedItem[index].id +'"><i\
-                                                        class="fas fa-plus"></i></button>\
-                                            </div>\
-                                        </div>\
-                                        <div class="col-5 align-self-center text-right">\
-                                            <button type="button" class="btn btn-danger delete-item" data-id="'+ selectedItem[index].id +'"><i class="fas fa-trash"></i></button>\
-                                        </div>\
-                                    </div>\
-                                </div>');
-    
-                    $('#scrollable-content').append(item);
+                appendToSelectedItems(selectedItem)
+                $("#searchInput").focus();
+                calculateTotalSpend();
+            });
+
+            $(document).on("click", ".increment", function() {
+                var result = $(this).data('id');
+                var index = selectedItem.findIndex(item => item.id == result);
+                selectedItem[index].qty += 1;
+
+                appendToSelectedItems(selectedItem)
+                $("#searchInput").focus();
+                calculateTotalSpend();
+            });
+
+            $(document).on("click", ".decrement", function() {
+                var result = $(this).data('id');
+                var index = selectedItem.findIndex(item => item.id == result);
+                if (selectedItem[index].qty > 1) {
+                    selectedItem[index].qty -= 1;
+                    appendToSelectedItems(selectedItem);
                 }
                 $("#searchInput").focus();
+                calculateTotalSpend();
             });
+
+            function appendToSelectedItems(selectedItem) {
+                $('#scrollable-content').empty();
+                for (let index = 0; index < selectedItem.length; index++) {
+                    var item = $('<div class="card p-3">\
+                                        <div class="row">\
+                                            <div class="col-7">\
+                                                <div class="row">\
+                                                    <h5 style="font-size: 14pt; font-weight: 600;">' + selectedItem[index]
+                        .name + '</h5>\
+                                                </div>\
+                                                <div class="row">\
+                                                    <h6>Rp. ' + selectedItem[index].selling_price +
+                        '</h6>\
+                                                </div>\
+                                                <div class="row text-center">\
+                                                    <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' + selectedItem[index].id + '"><i\
+                                                            class="fas fa-minus"></i></button>\
+                                                    <span class="mt-1">' + selectedItem[index].qty +
+                        '</span>\
+                                                    <button type="button" class="btn btn-secondary ml-3 increment" data-id="' + selectedItem[index].id + '"><i\
+                                                            class="fas fa-plus"></i></button>\
+                                                </div>\
+                                            </div>\
+                                            <div class="col-5 align-self-center text-right">\
+                                                <button type="button" class="btn btn-danger delete-item" data-id="' +
+                        selectedItem[index].id + '"><i class="fas fa-trash"></i></button>\
+                                            </div>\
+                                        </div>\
+                                    </div>');
+
+                    $('#scrollable-content').append(item);
+                }
+            }
 
             // Fungsi untuk menampilkan hasil pencarian dalam daftar
             function displaySearchResults(results) {
