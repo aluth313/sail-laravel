@@ -33,7 +33,7 @@ class SaleController extends Controller
         $sale = Sale::create([
             'customer_id' => $request->customer_id,
             'user_id' => Auth::user()->id,
-            'shipping_price' => $request->shipping_price,
+            'shipping_price' => str_replace(',', '', $request->shipping_price),
             'grand_total' => $request->grand_total,
         ]);
         

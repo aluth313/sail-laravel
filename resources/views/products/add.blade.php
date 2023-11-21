@@ -23,25 +23,28 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="name">Nama Produk</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama produk" required>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    placeholder="Masukkan nama produk" required>
                             </div>
                             <div class="form-group">
                                 <label for="stock">Stok</label>
-                                <input type="number" class="form-control" id="stock" name="stock" placeholder="Masukkan stok" required>
+                                <input type="number" class="form-control" id="stock" name="stock"
+                                    placeholder="Masukkan stok" required>
                             </div>
                             <div class="form-group">
                                 <label for="unit">Satuan</label>
-                                <input type="text" class="form-control" id="unit" name="unit" placeholder="Masukkan Satuan">
+                                <input type="text" class="form-control" id="unit" name="unit"
+                                    placeholder="Masukkan Satuan">
                             </div>
                             <div class="form-group">
                                 <label for="purchase_price">Harga Beli</label>
-                                <input type="number" class="form-control" id="purchase_price" name="purchase_price"
-                                    placeholder="Masukkan Harga Beli atau Modal" required>
+                                <input type="text" class="form-control" id="purchase_price" name="purchase_price"
+                                    placeholder="Masukkan Harga Beli atau Modal" oninput="formatCurrency(this)" required>
                             </div>
                             <div class="form-group">
                                 <label for="selling_price">Harga Jual</label>
-                                <input type="number" class="form-control" id="selling_price" name="selling_price"
-                                    placeholder="Masukkan Harga Jual atau Modal" required>
+                                <input type="text" class="form-control" id="selling_price" name="selling_price"
+                                    placeholder="Masukkan Harga Jual" oninput="formatCurrency(this)" required>
                             </div>
                         </div>
 
@@ -58,5 +61,6 @@
     </div>
 @stop
 
-@section('css')
+@section('js')
+    <script src="{{ asset('js/utils.js') }}"></script>
 @stop

@@ -36,13 +36,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="purchase_price">Harga Beli</label>
-                                <input type="number" class="form-control" id="purchase_price" name="purchase_price"
-                                    placeholder="Masukkan Harga Beli atau Modal" value="{{$product->purchase_price}}" required>
+                                <input type="text" class="form-control" id="purchase_price" name="purchase_price"
+                                    placeholder="Masukkan Harga Beli atau Modal" value="{{number_format($product->purchase_price, 0, '.', ',')}}" oninput="formatCurrency(this)" required>
                             </div>
                             <div class="form-group">
                                 <label for="selling_price">Harga Jual</label>
-                                <input type="number" class="form-control" id="selling_price" name="selling_price"
-                                    placeholder="Masukkan Harga Jual atau Modal" value="{{$product->selling_price}}" required>
+                                <input type="text" class="form-control" id="selling_price" name="selling_price"
+                                    placeholder="Masukkan Harga Jual" value="{{number_format($product->selling_price, 0, '.', ',')}}" oninput="formatCurrency(this)" required>
                             </div>
                         </div>
 
@@ -59,5 +59,6 @@
     </div>
 @stop
 
-@section('css')
+@section('js')
+<script src="{{ asset('js/utils.js') }}"></script>
 @stop
