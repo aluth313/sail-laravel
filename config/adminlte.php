@@ -341,7 +341,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Per Bulan',
-                    'url'  => '#',
+                    'url'  => 'report-per-month',
                 ],
                 [
                     'text' => 'Per Hari',

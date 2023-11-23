@@ -29,3 +29,5 @@ Route::post('/products/search', [App\Http\Controllers\ProductController::class, 
 Route::resource('account', App\Http\Controllers\UserController::class);
 Route::put('/account/change-password/{id}', [App\Http\Controllers\UserController::class, 'updatePassword']);
 Route::resource('sales', App\Http\Controllers\SaleController::class);
+Route::get('/report-per-month', [App\Http\Controllers\SaleController::class, 'perMonth']);
+Route::post('/report-per-month', [App\Http\Controllers\SaleController::class, 'getDataPerMonth']);
