@@ -345,7 +345,7 @@ return [
                 ],
                 [
                     'text' => 'Per Hari',
-                    'url'  => '#',
+                    'url'  => 'report-per-day',
                 ],
                 // [
                 //     'text'    => 'level_one',

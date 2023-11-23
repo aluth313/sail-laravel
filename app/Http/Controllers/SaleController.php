@@ -18,6 +18,11 @@ class SaleController extends Controller
     {
         return view('reports.month');
     }
+    
+    public function perDay()
+    {
+        return view('reports.day');
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -60,6 +65,58 @@ class SaleController extends Controller
                 array_push($data, [
                     'month' => $months[$i],
                     'sale' => $salePerMonth[$i],
+                    'profit' => $profits[$i],
+                ]);
+            }
+        }
+        if ($request->ajax()) {
+            return DataTables::of($data)
+                ->addColumn('sale', function ($row) {
+                    return number_format($row['sale'], 0, '.', ',');
+                })
+                ->addColumn('profit', function ($row) {
+                    return number_format($row['profit'], 0, '.', ',');
+                })
+                ->rawColumns(['sale','profit'])
+                ->make(true);
+        }
+    }
+    
+    public function getDataPerDay(Request $request)
+    {
+        
+        $data = [];
+        if ($request->dateFrom != '' && $request->dateTo != '') {
+            $sales = Sale::with('salesDetail')
+                ->whereBetween('created_at', [$request->dateFrom.' 00:00:01', $request->dateTo.' 23:59:59'])
+                ->orderBy('created_at')
+                ->get();
+
+            $days = [];
+            $salePerDay = [];
+            $profits = [];
+            foreach ($sales as $sale) {
+                if (!in_array(formatDate($sale->created_at, 'j F Y'), $days)) {
+                    array_push($days, formatDate($sale->created_at, 'j F Y'));
+                    array_push($salePerDay, $sale->grand_total);
+                    $profit = 0;
+                    foreach ($sale->salesDetail as $detail) {
+                        $profit += $detail->profit;
+                    }
+                    array_push($profits, $profit);
+                } else {
+                    $index = count($salePerDay);
+                    $salePerDay[$index - 1] += $sale->grand_total;
+                    foreach ($sale->salesDetail as $detail) {
+                        $profits[$index - 1] += $detail->profit;
+                    }
+                }
+            }
+
+            for ($i=0; $i < count($days); $i++) { 
+                array_push($data, [
+                    'day' => $days[$i],
+                    'sale' => $salePerDay[$i],
                     'profit' => $profits[$i],
                 ]);
             }
