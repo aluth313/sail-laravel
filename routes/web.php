@@ -26,6 +26,7 @@ Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('products', App\Http\Controllers\ProductController::class);
+    Route::resource('customers', App\Http\Controllers\CustomerController::class);
     Route::post('/products/search', [App\Http\Controllers\ProductController::class, 'search']);
     Route::resource('account', App\Http\Controllers\UserController::class);
     Route::put('/account/change-password/{id}', [App\Http\Controllers\UserController::class, 'updatePassword']);
