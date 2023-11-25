@@ -326,6 +326,12 @@ return [
             // 'icon' => 'fas fa-fw fa-user',
         ],
         [
+            'text' => 'Pelanggan',
+            'url'  => 'customers',
+            'icon' => 'fas fa-fw fa-users',
+            // 'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'change_password',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
