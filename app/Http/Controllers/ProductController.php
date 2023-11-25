@@ -17,6 +17,14 @@ class ProductController extends Controller
         if ($request->ajax()) {
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('purchase_price', function ($row) {
+                    $purchase_price = number_format($row->purchase_price, 0, '.', ',');
+                    return $purchase_price;
+                })
+                ->addColumn('selling_price', function ($row) {
+                    $selling_price = number_format($row->selling_price, 0, '.', ',');
+                    return $selling_price;
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn =
                         '<a href="/products/'.$row->id.'/edit" class="btn btn-primary"><i class="fas fa-edit"></i></a> <button class="delete btn btn-danger" data-id="' .
@@ -24,7 +32,7 @@ class ProductController extends Controller
                         '"><i class="fas fa-trash"></i></button>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','selling_price','purchase_price'])
                 ->make(true);
         }
 
@@ -44,9 +52,20 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request['profit'] = $request->selling_price - $request->purchase_price;
-        $product = Product::create($request->all());
+        $data = $request->all();
+        $data['selling_price'] = str_replace(',', '', $request->selling_price);
+        $data['purchase_price'] = str_replace(',', '', $request->purchase_price);
+        $data['profit'] = $data['selling_price'] - $data['purchase_price'];
+        $product = Product::create($data);
         return redirect('products')->with('status','Berhasil menambah produk');
+    }
+    
+    public function search(Request $request)
+    {
+        $products = Product::where('name', 'like', '%'.$request->input('query').'%')
+        ->limit(10)
+        ->get();
+        return $products;
     }
 
     /**
@@ -75,8 +94,10 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->name = $request->name;
         $product->stock = $request->stock;
-        $product->purchase_price = $request->purchase_price;
-        $product->selling_price = $request->selling_price;
+        $product->purchase_price = str_replace(',', '', $request->purchase_price);
+        $product->selling_price = str_replace(',', '', $request->selling_price);
+        $product->profit = $product->selling_price - $product->purchase_price;
+        $product->unit = $request->unit;
         $product->save();
 
         return redirect('products')->with('status','Berhasil mengupdate produk');
