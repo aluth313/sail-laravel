@@ -46,8 +46,9 @@
                                 <div class="col-5">
                                     <select name="customer_id" id="customer_id" class="form-control">
                                         <option value="">== Pilih Pelanggan ==</option>
-                                        <option value="1">Aceng</option>
-                                        <option value="2">Ucok</option>
+                                        @foreach ($customers as $customer)
+                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -179,7 +180,7 @@
                                                     <div class="row">\
                                                         <h6>Rp. ' + Intl.NumberFormat('en-ID').format(result
                         .selling_price) +
-                        '</h6>\
+                        ' / '+ result.unit +'</h6>\
                                                     </div>\
                                                     <div class="row text-center">\
                                                         <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
@@ -234,6 +235,15 @@
             $(document).on("click", ".increment", function() {
                 var result = $(this).data('id');
                 var index = selectedItem.findIndex(item => item.id == result);
+                if (selectedItem[index].stock < (selectedItem[index].qty + 1)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Stok tidak cukup',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    return;
+                }
                 selectedItem[index].qty += 1;
 
                 appendToSelectedItems(selectedItem)
@@ -266,7 +276,7 @@
                                                     <div class="row">\
                                                         <h6>Rp. ' + Intl.NumberFormat('en-ID').format(selectedItem[index]
                             .selling_price) +
-                        '</h6>\
+                        ' / '+ selectedItem[index].unit +'</h6>\
                                                     </div>\
                                                     <div class="row text-center">\
                                                         <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +

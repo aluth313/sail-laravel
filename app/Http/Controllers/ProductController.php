@@ -29,7 +29,7 @@ class ProductController extends Controller
                     $actionBtn =
                         '<a href="/products/'.$row->id.'/edit" class="btn btn-primary"><i class="fas fa-edit"></i></a> <button class="delete btn btn-danger" data-id="' .
                         $row->id .
-                        '"><i class="fas fa-trash"></i></button>';
+                        '"><i class="fas fa-trash"></i></button> <a href="/products/add-stock/'.$row->id.'" class="btn btn-success"><i class="fas fa-plus"></i></a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action','selling_price','purchase_price'])
@@ -63,6 +63,7 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $products = Product::where('name', 'like', '%'.$request->input('query').'%')
+        ->where('stock', '>', 0)
         ->limit(10)
         ->get();
         return $products;
@@ -71,9 +72,20 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function addStock(string $id)
     {
-        //
+        $product = Product::find($id);
+
+        return view('products.add_stock', compact('product'));
+    }
+    
+    public function updateStock(Request $request, string $id)
+    {
+        $product = Product::find($id);
+        $product->stock += $request->stock;
+        $product->save();
+
+        return redirect('products')->with('status','Berhasil menambah stok');
     }
 
     /**

@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('products', App\Http\Controllers\ProductController::class);
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
     Route::post('/products/search', [App\Http\Controllers\ProductController::class, 'search']);
+    Route::get('/products/add-stock/{id}', [App\Http\Controllers\ProductController::class, 'addStock']);
+    Route::put('/products/add-stock/{id}', [App\Http\Controllers\ProductController::class, 'updateStock']);
     Route::resource('account', App\Http\Controllers\UserController::class);
     Route::put('/account/change-password/{id}', [App\Http\Controllers\UserController::class, 'updatePassword']);
     Route::resource('sales', App\Http\Controllers\SaleController::class);
