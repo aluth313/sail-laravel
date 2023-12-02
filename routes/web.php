@@ -27,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('products', App\Http\Controllers\ProductController::class);
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
+    Route::get('/customers/history/{id}', [App\Http\Controllers\CustomerController::class, 'history']);
+    Route::get('/customers/detail-history/{id}/', [App\Http\Controllers\CustomerController::class, 'detailHistory']);
     Route::post('/products/search', [App\Http\Controllers\ProductController::class, 'search']);
     Route::get('/products/add-stock/{id}', [App\Http\Controllers\ProductController::class, 'addStock']);
     Route::put('/products/add-stock/{id}', [App\Http\Controllers\ProductController::class, 'updateStock']);
