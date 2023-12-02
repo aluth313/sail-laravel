@@ -47,7 +47,7 @@
                                     <select name="customer_id" id="customer_id" class="form-control">
                                         <option value="">== Pilih Pelanggan ==</option>
                                         @foreach ($customers as $customer)
-                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -112,14 +112,17 @@
         }
 
         /* .delete-item {
-                    text-align-last: right;
-                } */
+                        text-align-last: right;
+                    } */
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('#customer_id').select2();
             $("#searchInput").focus();
             var selectedItem = [];
             var totalSpend = 0;
@@ -172,33 +175,36 @@
                     result.qty = 1;
                     selectedItem.push(result);
                     var item = $('<div class="card p-3">\
-                                            <div class="row">\
-                                                <div class="col-7">\
-                                                    <div class="row">\
-                                                        <h5 style="font-size: 14pt; font-weight: 600;">' + result.name + '</h5>\
-                                                    </div>\
-                                                    <div class="row">\
-                                                        <h6>Rp. ' + Intl.NumberFormat('en-ID').format(result
-                        .selling_price) +
-                        ' / '+ result.unit +'</h6>\
-                                                    </div>\
-                                                    <div class="row text-center">\
-                                                        <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
+                                                <div class="row">\
+                                                    <div class="col-7">\
+                                                        <div class="row">\
+                                                            <h5 style="font-size: 14pt; font-weight: 600;">' + result
+                        .name + '</h5>\
+                                                        </div>\
+                                                        <div class="row">\
+                                                            <h6>Rp. ' + Intl.NumberFormat('en-ID').format(result
+                            .selling_price) +
+                        ' / ' + result.unit +
+                        '</h6>\
+                                                        </div>\
+                                                        <div class="row text-center">\
+                                                            <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
                         result.id + '"><i\
-                                                                class="fas fa-minus"></i></button>\
-                                                        <span class="mt-1">' + result.qty +
+                                                                    class="fas fa-minus"></i></button>\
+                                                            <span class="mt-1">' + result.qty +
                         '</span>\
-                                                        <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
-                        result.id + '"><i\
-                                                                class="fas fa-plus"></i></button>\
+                                                            <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
+                        result.id +
+                        '"><i\
+                                                                    class="fas fa-plus"></i></button>\
+                                                        </div>\
+                                                    </div>\
+                                                    <div class="col-5 align-self-center text-right">\
+                                                        <button type="button" class="btn btn-danger delete-item" data-id="' +
+                        result.id + '"><i class="fas fa-trash"></i></button>\
                                                     </div>\
                                                 </div>\
-                                                <div class="col-5 align-self-center text-right">\
-                                                    <button type="button" class="btn btn-danger delete-item" data-id="' +
-                        result.id + '"><i class="fas fa-trash"></i></button>\
-                                                </div>\
-                                            </div>\
-                                        </div>');
+                                            </div>');
 
                     $('#scrollable-content').append(item);
                 } else {
@@ -217,7 +223,8 @@
                 for (let index = 0; index < selectedItem.length; index++) {
                     totalSpend += (selectedItem[index].qty * selectedItem[index].selling_price);
                 }
-                totalSpend += parseFloat($('#shipping_price').val() == '' ? '0' : $('#shipping_price').val().replace(/,/g, ''));
+                totalSpend += parseFloat($('#shipping_price').val() == '' ? '0' : $('#shipping_price').val()
+                    .replace(/,/g, ''));
                 $('#total-spend').text('Rp. ' + Intl.NumberFormat('en-ID').format(totalSpend) + '');
                 $('#selected_items').val(JSON.stringify(selectedItem));
                 $('#grand_total').val(totalSpend);
@@ -266,35 +273,39 @@
                 $('#scrollable-content').empty();
                 for (let index = 0; index < selectedItem.length; index++) {
                     var item = $('<div class="card p-3">\
-                                            <div class="row">\
-                                                <div class="col-7">\
-                                                    <div class="row">\
-                                                        <h5 style="font-size: 14pt; font-weight: 600;">' + selectedItem[
+                                                <div class="row">\
+                                                    <div class="col-7">\
+                                                        <div class="row">\
+                                                            <h5 style="font-size: 14pt; font-weight: 600;">' +
+                        selectedItem[
                             index]
                         .name + '</h5>\
-                                                    </div>\
-                                                    <div class="row">\
-                                                        <h6>Rp. ' + Intl.NumberFormat('en-ID').format(selectedItem[index]
+                                                        </div>\
+                                                        <div class="row">\
+                                                            <h6>Rp. ' + Intl.NumberFormat('en-ID').format(selectedItem[
+                                index]
                             .selling_price) +
-                        ' / '+ selectedItem[index].unit +'</h6>\
-                                                    </div>\
-                                                    <div class="row text-center">\
-                                                        <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
+                        ' / ' + selectedItem[index].unit +
+                        '</h6>\
+                                                        </div>\
+                                                        <div class="row text-center">\
+                                                            <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
                         selectedItem[index].id + '"><i\
-                                                                class="fas fa-minus"></i></button>\
-                                                        <span class="mt-1">' + selectedItem[index].qty +
+                                                                    class="fas fa-minus"></i></button>\
+                                                            <span class="mt-1">' + selectedItem[index].qty +
                         '</span>\
-                                                        <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
-                        selectedItem[index].id + '"><i\
-                                                                class="fas fa-plus"></i></button>\
+                                                            <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
+                        selectedItem[index].id +
+                        '"><i\
+                                                                    class="fas fa-plus"></i></button>\
+                                                        </div>\
+                                                    </div>\
+                                                    <div class="col-5 align-self-center text-right">\
+                                                        <button type="button" class="btn btn-danger delete-item" data-id="' +
+                        selectedItem[index].id + '"><i class="fas fa-trash"></i></button>\
                                                     </div>\
                                                 </div>\
-                                                <div class="col-5 align-self-center text-right">\
-                                                    <button type="button" class="btn btn-danger delete-item" data-id="' +
-                        selectedItem[index].id + '"><i class="fas fa-trash"></i></button>\
-                                                </div>\
-                                            </div>\
-                                        </div>');
+                                            </div>');
 
                     $('#scrollable-content').append(item);
                 }
