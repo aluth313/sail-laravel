@@ -144,6 +144,7 @@ class SaleController extends Controller
             'user_id' => Auth::user()->id,
             'shipping_price' => $request->shipping_price == null || $request->shipping_price == '' || $request->shipping_price == 0 ? null : str_replace(',', '', $request->shipping_price),
             'grand_total' => $request->grand_total,
+            'cash' => $request->cash,
         ]);
 
         $data = json_decode($request->selected_items);
@@ -182,12 +183,11 @@ class SaleController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function printStruk(Request $request)
     {
-        //
+        $items = $request->items;
+        $cash = $request->cash;
+        return view('print_temp', compact('items','cash'));
     }
 
     /**

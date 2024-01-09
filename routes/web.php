@@ -39,4 +39,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/report-per-day', [App\Http\Controllers\SaleController::class, 'perDay']);
     Route::post('/report-per-month', [App\Http\Controllers\SaleController::class, 'getDataPerMonth']);
     Route::post('/report-per-day', [App\Http\Controllers\SaleController::class, 'getDataPerDay']);
+    Route::post('/print-struk', [App\Http\Controllers\SaleController::class, 'printStruk']);
 });

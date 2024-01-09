@@ -63,6 +63,15 @@
                             </div>
                             <div class="row mt-2">
                                 <div class="col-7">
+                                    <h5>Tunai</h5>
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" name="cash" id="cash" class="form-control"
+                                        placeholder="Uang tunai..." oninput="formatCurrency(this)" required>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-7">
                                     <h5>Total Belanja</h5>
                                 </div>
                                 <div class="col-5">
@@ -70,12 +79,46 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="form-control btn btn-success btn-lg mt-3"
+                            <button type="button" id="btnPay" class="form-control btn btn-success btn-lg mt-3"
                                 style="height: 50px">BAYAR</button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Transaksi Berhasil</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5>Total Belanja <span class="float-right" id="totalSpendText">10,000</span>
+                                            </h5>
+                                            <h5>Tunai <span class="float-right" id="cashText">10,000</span></h5>
+                                            <h3>Kembalian <b class="float-right" id="changeText">5,000</b></h3>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Tutup</button>
+                                            <button type="button" id="print-struk" class="btn btn-primary">Print
+                                                Struk</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="spinner-box" id="spinner-box">
+                    <div class="pulse-container">
+                        <div class="pulse-bubble pulse-bubble-1"></div>
+                        <div class="pulse-bubble pulse-bubble-2"></div>
+                        <div class="pulse-bubble pulse-bubble-3"></div>
+                    </div>
+                </div>
             </div>
+
         </form>
     </div>
 @stop
@@ -111,9 +154,61 @@
             /* Tambahkan gaya lain sesuai kebutuhan */
         }
 
-        /* .delete-item {
-                        text-align-last: right;
-                    } */
+
+        @keyframes pulse {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: .25;
+                transform: scale(.75);
+            }
+        }
+
+        /* GRID STYLING */
+
+        /* * {
+                            box-sizing: border-box;
+                        } */
+
+        .spinner-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999
+        }
+
+
+        /* PULSE BUBBLES */
+
+        .pulse-container {
+            width: 120px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pulse-bubble {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #3ff9dc;
+        }
+
+        .pulse-bubble-1 {
+            animation: pulse .4s ease 0s infinite alternate;
+        }
+
+        .pulse-bubble-2 {
+            animation: pulse .4s ease .2s infinite alternate;
+        }
+
+        .pulse-bubble-3 {
+            animation: pulse .4s ease .4s infinite alternate;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @stop
@@ -124,6 +219,7 @@
         $(document).ready(function() {
             $('#customer_id').select2();
             $("#searchInput").focus();
+            $("#spinner-box").hide();
             var selectedItem = [];
             var totalSpend = 0;
             $("#searchInput").on("input", function() {
@@ -174,37 +270,42 @@
                 if (isExist == -1) {
                     result.qty = 1;
                     selectedItem.push(result);
-                    var item = $('<div class="card p-3">\
-                                                <div class="row">\
-                                                    <div class="col-7">\
-                                                        <div class="row">\
-                                                            <h5 style="font-size: 14pt; font-weight: 600;">' + result
+                    var item = $(
+                        '<div class="card p-3">\
+                                                                            <div class="row">\
+                                                                                <div class="col-7">\
+                                                                                    <div class="row">\
+                                                                                        <h5 style="font-size: 14pt; font-weight: 600;">' +
+                        result
                         .name + '</h5>\
-                                                        </div>\
-                                                        <div class="row">\
-                                                            <h6>Rp. ' + Intl.NumberFormat('en-ID').format(result
+                                                                                    </div>\
+                                                                                    <div class="row">\
+                                                                                        <h6>Rp. ' + Intl.NumberFormat(
+                            'en-ID')
+                        .format(
+                            result
                             .selling_price) +
                         ' / ' + result.unit +
                         '</h6>\
-                                                        </div>\
-                                                        <div class="row text-center">\
-                                                            <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
+                                                                                    </div>\
+                                                                                    <div class="row text-center">\
+                                                                                        <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
                         result.id + '"><i\
-                                                                    class="fas fa-minus"></i></button>\
-                                                            <span class="mt-1">' + result.qty +
+                                                                                                class="fas fa-minus"></i></button>\
+                                                                                        <span class="mt-1">' + result.qty +
                         '</span>\
-                                                            <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
+                                                                                        <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
                         result.id +
                         '"><i\
-                                                                    class="fas fa-plus"></i></button>\
-                                                        </div>\
-                                                    </div>\
-                                                    <div class="col-5 align-self-center text-right">\
-                                                        <button type="button" class="btn btn-danger delete-item" data-id="' +
+                                                                                                class="fas fa-plus"></i></button>\
+                                                                                    </div>\
+                                                                                </div>\
+                                                                                <div class="col-5 align-self-center text-right">\
+                                                                                    <button type="button" class="btn btn-danger delete-item" data-id="' +
                         result.id + '"><i class="fas fa-trash"></i></button>\
-                                                    </div>\
-                                                </div>\
-                                            </div>');
+                                                                                </div>\
+                                                                            </div>\
+                                                                        </div>');
 
                     $('#scrollable-content').append(item);
                 } else {
@@ -269,43 +370,119 @@
                 calculateTotalSpend();
             });
 
+            $(document).on("click", "#print-struk", function() {
+                $('#exampleModal').modal('hide');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/print-struk',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        items: selectedItem,
+                        cash: (parseFloat($('#cash').val() == '' ? '0' : $('#cash').val()
+                            .replace(/,/g, ''))),
+                    },
+                    success: function(printContent) {
+                        var originalContent = document.body.innerHTML;
+                        document.body.innerHTML = printContent;
+                        window.print();
+                        window.location.href = '/home';
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            $(document).on("click", "#btnPay", function() {
+                if ($('#selected_items').val() == '') {
+                    alert('Anda belum memilih produk.');
+                    return;
+                }
+                if ($('#cash').val() == '' || $('#cash').val() == '0') {
+                    alert('Uang tunai wajib diisi.');
+                    return;
+                }
+                var cash = parseFloat($('#cash').val() == '' ? '0' : $('#cash').val()
+                    .replace(/,/g, ''));
+                if (cash < $('#grand_total').val()) {
+                    alert('Uang tunai kurang dari total belanja.');
+                    return;
+                }
+                $('#spinner-box').show();
+                var data = {
+                    cash: cash,
+                    customer_id: $('#customer_id').val(),
+                    shipping_price: $('#shipping_price').val(),
+                    grand_total: $('#grand_total').val(),
+                    selected_items: $('#selected_items').val(),
+                    _token: '{{ csrf_token() }}',
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/sales',
+                    data: data,
+                    success: function(response) {
+                        $('#spinner-box').hide();
+                        var change = (parseFloat($('#cash').val() == '' ? '0' : $('#cash').val()
+                            .replace(/,/g, ''))) - totalSpend;
+                        $('#totalSpendText').text($('#total-spend').text());
+                        $('#cashText').text('Rp. ' + $('#cash').val() + '');
+                        $('#changeText').text('Rp. ' + Intl.NumberFormat('en-ID').format(
+                            change) + '');
+                        $('#exampleModal').modal('show');
+                    },
+                    error: function(error) {
+                        alert('Transaksi Gagal, ada kesalahan pada sistem');
+                    }
+                });
+            });
+
             function appendToSelectedItems(selectedItem) {
                 $('#scrollable-content').empty();
                 for (let index = 0; index < selectedItem.length; index++) {
-                    var item = $('<div class="card p-3">\
-                                                <div class="row">\
-                                                    <div class="col-7">\
-                                                        <div class="row">\
-                                                            <h5 style="font-size: 14pt; font-weight: 600;">' +
+                    var item = $(
+                        '<div class="card p-3">\
+                                                                            <div class="row">\
+                                                                                <div class="col-7">\
+                                                                                    <div class="row">\
+                                                                                        <h5 style="font-size: 14pt; font-weight: 600;">' +
                         selectedItem[
                             index]
                         .name + '</h5>\
-                                                        </div>\
-                                                        <div class="row">\
-                                                            <h6>Rp. ' + Intl.NumberFormat('en-ID').format(selectedItem[
+                                                                                    </div>\
+                                                                                    <div class="row">\
+                                                                                        <h6>Rp. ' + Intl.NumberFormat(
+                            'en-ID')
+                        .format(
+                            selectedItem[
                                 index]
                             .selling_price) +
                         ' / ' + selectedItem[index].unit +
                         '</h6>\
-                                                        </div>\
-                                                        <div class="row text-center">\
-                                                            <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
+                                                                                    </div>\
+                                                                                    <div class="row text-center">\
+                                                                                        <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
                         selectedItem[index].id + '"><i\
-                                                                    class="fas fa-minus"></i></button>\
-                                                            <span class="mt-1">' + selectedItem[index].qty +
+                                                                                                class="fas fa-minus"></i></button>\
+                                                                                        <span class="mt-1">' +
+                        selectedItem[
+                            index]
+                        .qty +
                         '</span>\
-                                                            <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
+                                                                                        <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
                         selectedItem[index].id +
                         '"><i\
-                                                                    class="fas fa-plus"></i></button>\
-                                                        </div>\
-                                                    </div>\
-                                                    <div class="col-5 align-self-center text-right">\
-                                                        <button type="button" class="btn btn-danger delete-item" data-id="' +
+                                                                                                class="fas fa-plus"></i></button>\
+                                                                                    </div>\
+                                                                                </div>\
+                                                                                <div class="col-5 align-self-center text-right">\
+                                                                                    <button type="button" class="btn btn-danger delete-item" data-id="' +
                         selectedItem[index].id + '"><i class="fas fa-trash"></i></button>\
-                                                    </div>\
-                                                </div>\
-                                            </div>');
+                                                                                </div>\
+                                                                            </div>\
+                                                                        </div>');
 
                     $('#scrollable-content').append(item);
                 }
