@@ -170,8 +170,8 @@
         /* GRID STYLING */
 
         /* * {
-                            box-sizing: border-box;
-                        } */
+                                box-sizing: border-box;
+                            } */
 
         .spinner-box {
             position: fixed;
@@ -272,40 +272,41 @@
                     selectedItem.push(result);
                     var item = $(
                         '<div class="card p-3">\
-                                                                            <div class="row">\
-                                                                                <div class="col-7">\
-                                                                                    <div class="row">\
-                                                                                        <h5 style="font-size: 14pt; font-weight: 600;">' +
+                                                                                <div class="row">\
+                                                                                    <div class="col-7">\
+                                                                                        <div class="row">\
+                                                                                            <h5 style="font-size: 14pt; font-weight: 600;">' +
                         result
                         .name + '</h5>\
-                                                                                    </div>\
-                                                                                    <div class="row">\
-                                                                                        <h6>Rp. ' + Intl.NumberFormat(
+                                                                                        </div>\
+                                                                                        <div class="row">\
+                                                                                            <h6>Rp. ' + Intl.NumberFormat(
                             'en-ID')
                         .format(
                             result
                             .selling_price) +
                         ' / ' + result.unit +
                         '</h6>\
-                                                                                    </div>\
-                                                                                    <div class="row text-center">\
-                                                                                        <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
+                                                                                        </div>\
+                                                                                        <div class="row text-center">\
+                                                                                            <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
                         result.id + '"><i\
-                                                                                                class="fas fa-minus"></i></button>\
-                                                                                        <span class="mt-1">' + result.qty +
+                                                                                                    class="fas fa-minus"></i></button>\
+                                                                                            <span class="mt-1">' + result
+                        .qty +
                         '</span>\
-                                                                                        <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
+                                                                                            <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
                         result.id +
                         '"><i\
-                                                                                                class="fas fa-plus"></i></button>\
+                                                                                                    class="fas fa-plus"></i></button>\
+                                                                                        </div>\
+                                                                                    </div>\
+                                                                                    <div class="col-5 align-self-center text-right">\
+                                                                                        <button type="button" class="btn btn-danger delete-item" data-id="' +
+                        result.id + '"><i class="fas fa-trash"></i></button>\
                                                                                     </div>\
                                                                                 </div>\
-                                                                                <div class="col-5 align-self-center text-right">\
-                                                                                    <button type="button" class="btn btn-danger delete-item" data-id="' +
-                        result.id + '"><i class="fas fa-trash"></i></button>\
-                                                                                </div>\
-                                                                            </div>\
-                                                                        </div>');
+                                                                            </div>');
 
                     $('#scrollable-content').append(item);
                 } else {
@@ -379,8 +380,12 @@
                     data: {
                         _token: '{{ csrf_token() }}',
                         items: selectedItem,
+                        time: '{{ date("d-m-Y H:i") }}',
                         cash: (parseFloat($('#cash').val() == '' ? '0' : $('#cash').val()
                             .replace(/,/g, ''))),
+                        shipping_price: parseFloat($('#shipping_price').val() == '' ? '0' : $(
+                                '#shipping_price').val()
+                            .replace(/,/g, '')),
                     },
                     success: function(printContent) {
                         var originalContent = document.body.innerHTML;
@@ -444,16 +449,16 @@
                 for (let index = 0; index < selectedItem.length; index++) {
                     var item = $(
                         '<div class="card p-3">\
-                                                                            <div class="row">\
-                                                                                <div class="col-7">\
-                                                                                    <div class="row">\
-                                                                                        <h5 style="font-size: 14pt; font-weight: 600;">' +
+                                                                                <div class="row">\
+                                                                                    <div class="col-7">\
+                                                                                        <div class="row">\
+                                                                                            <h5 style="font-size: 14pt; font-weight: 600;">' +
                         selectedItem[
                             index]
                         .name + '</h5>\
-                                                                                    </div>\
-                                                                                    <div class="row">\
-                                                                                        <h6>Rp. ' + Intl.NumberFormat(
+                                                                                        </div>\
+                                                                                        <div class="row">\
+                                                                                            <h6>Rp. ' + Intl.NumberFormat(
                             'en-ID')
                         .format(
                             selectedItem[
@@ -461,28 +466,28 @@
                             .selling_price) +
                         ' / ' + selectedItem[index].unit +
                         '</h6>\
-                                                                                    </div>\
-                                                                                    <div class="row text-center">\
-                                                                                        <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
+                                                                                        </div>\
+                                                                                        <div class="row text-center">\
+                                                                                            <button type="button" class="btn btn-secondary mr-3 decrement" data-id="' +
                         selectedItem[index].id + '"><i\
-                                                                                                class="fas fa-minus"></i></button>\
-                                                                                        <span class="mt-1">' +
+                                                                                                    class="fas fa-minus"></i></button>\
+                                                                                            <span class="mt-1">' +
                         selectedItem[
                             index]
                         .qty +
                         '</span>\
-                                                                                        <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
+                                                                                            <button type="button" class="btn btn-secondary ml-3 increment" data-id="' +
                         selectedItem[index].id +
                         '"><i\
-                                                                                                class="fas fa-plus"></i></button>\
+                                                                                                    class="fas fa-plus"></i></button>\
+                                                                                        </div>\
+                                                                                    </div>\
+                                                                                    <div class="col-5 align-self-center text-right">\
+                                                                                        <button type="button" class="btn btn-danger delete-item" data-id="' +
+                        selectedItem[index].id + '"><i class="fas fa-trash"></i></button>\
                                                                                     </div>\
                                                                                 </div>\
-                                                                                <div class="col-5 align-self-center text-right">\
-                                                                                    <button type="button" class="btn btn-danger delete-item" data-id="' +
-                        selectedItem[index].id + '"><i class="fas fa-trash"></i></button>\
-                                                                                </div>\
-                                                                            </div>\
-                                                                        </div>');
+                                                                            </div>');
 
                     $('#scrollable-content').append(item);
                 }

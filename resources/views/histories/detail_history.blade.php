@@ -14,7 +14,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-2">Nama Pelanggan</div>
-                            <div class="col-md-3">: {{ $details->customer->name }}</div>
+                            <div class="col-md-3">: {{ $details->customer->name ?? '-' }}</div>
                             <div class="col-md-2"></div>
                             <div class="col-md-2">Tanggal Transaksi</div>
                             <div class="col-md-3">: {{ formatDate($details->created_at, 'j F Y') }}</div>
@@ -53,9 +53,9 @@
                                     <th scope="col">{{ number_format($details->grand_total, 0, '.', ',') }}</th>
                                 </tr>
                                 <tr class="table-secondary">
-                                  <th scope="col" colspan="2">Tunai</th>
-                                  <th scope="col">{{ number_format($details->cash, 0, '.', ',') }}</th>
-                              </tr>
+                                    <th scope="col" colspan="2">Tunai</th>
+                                    <th scope="col">{{ number_format($details->cash, 0, '.', ',') }}</th>
+                                </tr>
                             </tbody>
                             <input type="hidden" id="details" value="{{ json_encode($details) }}">
                         </table>

@@ -13,12 +13,16 @@ if (!function_exists('formatDate')) {
 }
 
 if (!function_exists('calculateTotal')) {
-    function calculateTotal($items)
+    function calculateTotal($items, $shipping_price)
     {
         $total = 0;
         
         foreach ($items as $item) {
-            $total += $item['selling_price'];
+            $total += $item['selling_price'] * $item['qty'];
+        }
+
+        if ($shipping_price > 0) {
+            $total += $shipping_price;
         }
 
         return $total;

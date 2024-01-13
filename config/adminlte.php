@@ -311,24 +311,29 @@ return [
         //     'url'  => 'admin/blog',
         //     'can'  => 'manage-blog',
         // ],
-        [
-            'text'        => 'Contoh Form',
-            'url'         => 'form',
-            'icon'        => 'far fa-fw fa-file',
-            // 'label'       => 4,
-            // 'label_color' => 'success',
-        ],
-        [
-            'text'        => 'Penjualan',
-            'url'         => 'home',
-            'icon'        => 'fas fa-fw fa-shopping-cart',
-        ],
+        // [
+        //     'text'        => 'Contoh Form',
+        //     'url'         => 'form',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     // 'label'       => 4,
+        //     // 'label_color' => 'success',
+        // ],
         // ['header' => 'account_settings'],
         [
             'text' => 'Produk',
             'url'  => 'products',
             'icon' => 'fas fa-fw fa-briefcase',
             // 'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text'        => 'Penjualan',
+            'url'         => 'home',
+            'icon'        => 'fas fa-fw fa-shopping-cart',
+        ],
+        [
+            'text'        => 'Riwayat Penjualan',
+            'url'         => 'histories',
+            'icon'        => 'fas fa-fw fa-history',
         ],
         [
             'text' => 'Pelanggan',

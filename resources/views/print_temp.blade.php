@@ -78,11 +78,14 @@
 <body>
     <div class="ticket">
         {{-- <img src="{{ asset('') }}" alt="Logo"> --}}
-        <p class="centered">Toko Lilis
-            <br>Majalaya
-            {{-- <br>Address line 2 --}}
+        <p class="centered">Jayadi Collections
+            <br>Panyadap Majalaya
+            <br>082320744773
         </p>
-        <table>
+        <span>No. <span style="float: right;">{{ $invoice }}</span></span><br>
+        <span>Pembeli <span style="float: right;">{{ $customer != null ? str_pad($customer->id, 4, '0', STR_PAD_LEFT).' '.$customer->name : '-' }} </span></span><br>
+        <span>Tanggal <span style="float: right;">{{ formatDate($time, 'd-m-Y H:i') }}</span></span>
+        <table style="margin-top: 10px">
             <thead>
                 <tr class="bordered-top bordered-bottom">
                     <th class="quantity">Jml</th>
@@ -98,23 +101,31 @@
                     <td class="price align-content-top">Rp. {{ number_format($item['selling_price'], 0, '.', ',') }}</td>
                 </tr>
                 @endforeach
+                @if($shipping_price > 0)
                 <tr class="bordered-top">
-                    <td class="quantity align-content-top"></td>
-                    <td class="description bold align-content-top">Total</td>
-                    <td class="price bold align-content-top">Rp. {{ number_format(calculateTotal($items), 0, '.', ',') }}</td>
+                    <td colspan="3" class="bold">
+                        <span>Ongkir <span style="float: right">Rp. {{ number_format($shipping_price, 0, '.', ',') }}</span></span>
+                    </td>
+                </tr>
+                @endif
+                <tr class="{{ $shipping_price > 0 ? '' : 'bordered-top' }}">
+                    <td colspan="3" class="bold">
+                        <span>Total <span style="float: right">Rp. {{ number_format(calculateTotal($items, $shipping_price), 0, '.', ',') }}</span></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td class="quantity align-content-top"></td>
-                    <td class="description bold align-content-top">Tunai</td>
-                    <td class="price bold align-content-top">Rp. {{ number_format($cash, 0, '.', ',') }}</td>
+                    <td colspan="3" class="bold">
+                        <span>Tunai <span style="float: right">Rp. {{ number_format($cash, 0, '.', ',') }}</span></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td class="quantity align-content-top"></td>
-                    <td class="description bold align-content-top">Kembalian</td>
-                    <td class="price bold align-content-top">Rp. {{ number_format($cash - calculateTotal($items), 0, '.', ',') }}</td>
+                    <td colspan="3" class="bold">
+                        <span>Kembalian <span style="float: right">Rp. {{ number_format($cash - calculateTotal($items, $shipping_price), 0, '.', ',') }}</span></span>
+                    </td>
                 </tr>
             </tbody>
         </table>
+        
         <br>
         <p class="centered">Terimakasih sudah belanja
             <br>Sehat selalu

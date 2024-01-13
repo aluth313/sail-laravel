@@ -185,9 +185,17 @@ class SaleController extends Controller
 
     public function printStruk(Request $request)
     {
+        $lastTrans = Sale::with('customer')->latest()->first();
+        if ($request->last_trans) {
+            $lastTrans = (object) $request->last_trans;
+        }
+        $invoice = str_pad($lastTrans->id, 10, '0', STR_PAD_LEFT);
         $items = $request->items;
         $cash = $request->cash;
-        return view('print_temp', compact('items','cash'));
+        $shipping_price = $request->shipping_price;
+        $time = $request->time;
+        $customer = $request->last_trans ? ($lastTrans->customer != null ? (object) $lastTrans->customer : null) : $lastTrans->customer;
+        return view('print_temp', compact('items','cash','shipping_price','time','invoice','customer'));
     }
 
     /**
