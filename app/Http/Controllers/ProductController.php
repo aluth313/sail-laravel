@@ -53,8 +53,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['selling_price'] = str_replace(',', '', $request->selling_price);
-        $data['purchase_price'] = str_replace(',', '', $request->purchase_price);
+        $data['selling_price'] = str_replace('.', '', $request->selling_price);
+        $data['purchase_price'] = str_replace('.', '', $request->purchase_price);
         $data['profit'] = $data['selling_price'] - $data['purchase_price'];
         $product = Product::create($data);
         return redirect('products')->with('status','Berhasil menambah produk');
@@ -106,8 +106,8 @@ class ProductController extends Controller
         $product = Product::find($id);
         $product->name = $request->name;
         $product->stock = $request->stock;
-        $product->purchase_price = str_replace(',', '', $request->purchase_price);
-        $product->selling_price = str_replace(',', '', $request->selling_price);
+        $product->purchase_price = str_replace('.', '', $request->purchase_price);
+        $product->selling_price = str_replace('.', '', $request->selling_price);
         $product->profit = $product->selling_price - $product->purchase_price;
         $product->unit = $request->unit;
         $product->save();

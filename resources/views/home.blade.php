@@ -326,7 +326,7 @@
                     totalSpend += (selectedItem[index].qty * selectedItem[index].selling_price);
                 }
                 totalSpend += parseFloat($('#shipping_price').val() == '' ? '0' : $('#shipping_price').val()
-                    .replace(/,/g, ''));
+                    .split(".").join(""));
                 $('#total-spend').text('Rp. ' + Intl.NumberFormat('en-ID').format(totalSpend) + '');
                 $('#selected_items').val(JSON.stringify(selectedItem));
                 $('#grand_total').val(totalSpend);
@@ -382,10 +382,10 @@
                         items: selectedItem,
                         time: '{{ date("d-m-Y H:i") }}',
                         cash: (parseFloat($('#cash').val() == '' ? '0' : $('#cash').val()
-                            .replace(/,/g, ''))),
+                            .split(".").join(""))),
                         shipping_price: parseFloat($('#shipping_price').val() == '' ? '0' : $(
                                 '#shipping_price').val()
-                            .replace(/,/g, '')),
+                            .split(".").join("")),
                     },
                     success: function(printContent) {
                         var originalContent = document.body.innerHTML;
@@ -408,8 +408,7 @@
                     alert('Uang tunai wajib diisi.');
                     return;
                 }
-                var cash = parseFloat($('#cash').val() == '' ? '0' : $('#cash').val()
-                    .replace(/,/g, ''));
+                var cash = parseFloat($('#cash').val() == '' ? '0' : $('#cash').val().split(".").join(""));
                 if (cash < $('#grand_total').val()) {
                     alert('Uang tunai kurang dari total belanja.');
                     return;
@@ -431,7 +430,7 @@
                     success: function(response) {
                         $('#spinner-box').hide();
                         var change = (parseFloat($('#cash').val() == '' ? '0' : $('#cash').val()
-                            .replace(/,/g, ''))) - totalSpend;
+                            .split(".").join(""))) - totalSpend;
                         $('#totalSpendText').text($('#total-spend').text());
                         $('#cashText').text('Rp. ' + $('#cash').val() + '');
                         $('#changeText').text('Rp. ' + Intl.NumberFormat('en-ID').format(
